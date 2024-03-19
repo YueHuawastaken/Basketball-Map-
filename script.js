@@ -29,18 +29,33 @@ async function LoadProducts(map)
 
 
 document.addEventListener("DOMContentLoaded", async function(){
-
+    const weather = await getWeather();
     let data = await LoadProducts();
     // console.log(data);
     const markerClusterLayer = L.markerClusterGroup();
     const indoorClusterLayer = L.markerClusterGroup();
     const outdoorClusterLayer = L.markerClusterGroup();
+    const weatherCluster  = L.markerClusterGroup();
     let basketballCourtIcon = L.icon ({
         iconUrl: 'basketball.png',
         iconSize : [25, 25],
         iconAnchor : [12.5, 12.5],
         popupAnchor : [0 , 0]
     })
+    const stationsarray = weather.metadata.stations;
+    const weatherarray = weather.items[0].readings;
+    for (let index = 0; index < stationsarray.length; index++) {
+      // stationsarray[index].location.latitude
+      let raining = "Not Raining";
+      if(!weatherarray[index].value == 0)
+        raining = "Raining"
+      let marker = L.marker ([stationsarray[index].location.latitude, stationsarray[index].location.longitude]);
+      let popup = `<h3>${stationsarray[index].name} - ${stationsarray[index].device_id}</h3>
+      <h5>${raining} - ${weatherarray[index].value}mm</h5>`
+      marker.bindPopup (popup);
+      marker.addTo(weatherCluster);
+    }
+
     markerClusterLayer.addTo(map);
     for (let d of data) {
         let marker = L.marker([d.lat,d.lng], {icon: basketballCourtIcon} ); 
@@ -63,9 +78,42 @@ document.addEventListener("DOMContentLoaded", async function(){
    const baseLayers = {
     'All Basketball Courts' : markerClusterLayer,
     'Indoor' : indoorClusterLayer,
-    'Outdoor' : outdoorClusterLayer
+    'Outdoor' : outdoorClusterLayer,
    }
-   L.control.layers(baseLayers).addTo(map)
+   const overlayLayers = {
+    'Weather' : weatherCluster
+   }
+   L.control.layers(baseLayers,overlayLayers).addTo(map)
+   
+   const searchLayer = L.layerGroup();
+   searchLayer.addTo(map);
+   document.getElementById('searchButton').addEventListener('click', function() {
+    searchLayer.clearLayers()
+    var searchTerm = prompt('Enter search term:');
+    if (searchTerm) {
+      // Perform search functionality
+      // Example: Loop through cluster layer markers and filter based on search term
+      for (let d of data) 
+      {
+        // Example: Check if marker title contains the search temr
+        let comname = d.Name.toLowerCase().trim().split(" ").join("");
+
+        
+        if (comname.includes(searchTerm.toLowerCase().trim().split(" ").join(""))) {
+          // Show marker
+          let searchMarker = L.marker ([
+            d.lat,
+            d.lng
+          ]
+          )
+          searchMarker.addTo(searchLayer);
+          let popup=`<h3>${d.Name}</h3>
+            <img src = "${d.image}" class="basketballimg">`;
+            searchMarker.bindPopup (popup);
+        } 
+      }
+    }
+  });
 })
 
 function getRandomLatLng(map) {
@@ -82,6 +130,23 @@ function getRandomLatLng(map) {
     return [ randomLat, randomLng,];
 }
 
+// document.getElementById('searchButton').addEventListener('click', function() {
+//     var searchTerm = prompt('Enter search term:');
+//     if (searchTerm) {
+//       // Perform search functionality
+//       // Example: Loop through cluster layer markers and filter based on search term
+//       markers.eachLayer(function(marker) {
+//         // Example: Check if marker title contains the search term
+//         if (marker.options.title.includes(searchTerm)) {
+//           // Show marker
+//           marker.addTo(map);
+//         } else {
+//           // Hide marker
+//           map.removeLayer(marker);
+//         }
+//       });
+//     }
+//   });
 // const emptyLayer = L.layerGroup ();
 // const indoorLayer = L.markerClusterGroup ();
 // const outdoorLayer = L.markerClusterGroup ();

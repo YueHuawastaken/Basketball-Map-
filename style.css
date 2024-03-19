@@ -5,3 +5,15 @@
 .basketballimg{
     width : 300px;
 }
+
+#searchButton {
+    position: absolute;
+    top: 20px;
+    left: 60px;
+    z-index: 1000;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
