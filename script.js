@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     const weather = await getWeather();
     let data = await LoadProducts();
     // console.log(data);
+    //setInterval(reloaddata,300000);
     const markerClusterLayer = L.markerClusterGroup();
     const indoorClusterLayer = L.markerClusterGroup();
     const outdoorClusterLayer = L.markerClusterGroup();
