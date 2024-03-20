@@ -41,7 +41,14 @@ document.addEventListener("DOMContentLoaded", async function(){
         iconSize : [25, 25],
         iconAnchor : [12.5, 12.5],
         popupAnchor : [0 , 0]
+    });
+    let weatherIcon = L.icon ({
+      iconUrl: 'weather.png',
+      iconSize: [25,25],
+      iconAnchor: [12.5,12.5],
+      popupAnchor: [0,0]
     })
+
     const stationsarray = weather.metadata.stations;
     const weatherarray = weather.items[0].readings;
     for (let index = 0; index < stationsarray.length; index++) {
@@ -49,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async function(){
       let raining = "Not Raining";
       if(!weatherarray[index].value == 0)
         raining = "Raining"
-      let marker = L.marker ([stationsarray[index].location.latitude, stationsarray[index].location.longitude]);
+      let marker = L.marker ([stationsarray[index].location.latitude, stationsarray[index].location.longitude], {icon: weatherIcon});
       let popup = `<h3>${stationsarray[index].name} - ${stationsarray[index].device_id}</h3>
       <h5>${raining} - ${weatherarray[index].value}mm</h5>`
       marker.bindPopup (popup);
@@ -58,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 
     markerClusterLayer.addTo(map);
     for (let d of data) {
-        let marker = L.marker([d.lat,d.lng], {icon: basketballCourtIcon} ); 
+        let marker = L.marker([d.lat,d.lng], {icon: basketballCourtIcon}); 
         let popup=`<h3>${d.Name}</h3>
         <img src = "${d.image}" class="basketballimg">`;
         marker.bindPopup (popup);
@@ -111,24 +118,25 @@ document.addEventListener("DOMContentLoaded", async function(){
             <img src = "${d.image}" class="basketballimg">`;
             searchMarker.bindPopup (popup);
         } 
+
       }
     }
   });
 })
 
-function getRandomLatLng(map) {
-    // get the boundaries of the map
-    let bounds = map.getBounds();
-    let southWest = bounds.getSouthWest();
-    let northEast = bounds.getNorthEast();
-    let lngSpan = northEast.lng - southWest.lng;
-    let latSpan = northEast.lat - southWest.lat;
+// function getRandomLatLng(map) {
+//     // get the boundaries of the map
+//     let bounds = map.getBounds();
+//     let southWest = bounds.getSouthWest();
+//     let northEast = bounds.getNorthEast();
+//     let lngSpan = northEast.lng - southWest.lng;
+//     let latSpan = northEast.lat - southWest.lat;
 
-    let randomLng = Math.random() * lngSpan + southWest.lng;
-    let randomLat = Math.random() * latSpan + southWest.lat;
+//     let randomLng = Math.random() * lngSpan + southWest.lng;
+//     let randomLat = Math.random() * latSpan + southWest.lat;
 
-    return [ randomLat, randomLng,];
-}
+//     return [ randomLat, randomLng,];
+// }
 
 // document.getElementById('searchButton').addEventListener('click', function() {
 //     var searchTerm = prompt('Enter search term:');
