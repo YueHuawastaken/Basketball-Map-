@@ -914,5 +914,19 @@
       "lng" : 103.76430612606526,
       "image" : "https://lh5.googleusercontent.com/p/AF1QipM70PknpZjRJwXRNPlL8St41CU1XRdYIujpziSx=w408-h544-k-no",
       "Indoor" : "No"
+   },
+   {
+      "Name" :"MacPherson Community Club",
+      "lat" : 1.324275472540711, 
+      "lng" :103.88462254109915,
+      "image" : "MacCC.jpeg",
+      "Indoor" : "Yes"
+   },
+   {
+      "Name" : "Opp MacPherson Community Club",
+      "lat" : 1.3229807392127984, 
+      "lng" : 103.88477559530477,
+      "image" : "OppMacCC.jpeg",
+      "Indoor" : "No"
    }
 ]
